@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Simple-survey : Frontend survey plugin for general usage" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Simple-survey</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/zhangcx93/simple-survey">View on GitHub</a>
+
+          <h1 id="project_title">Simple-survey</h1>
+          <h2 id="project_tagline">Frontend survey plugin for general usage</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/zhangcx93/simple-survey/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/zhangcx93/simple-survey/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="simple-survey---generate-survey-with-json" class="anchor" href="#simple-survey---generate-survey-with-json"><span class="octicon octicon-link"></span></a>Simple-Survey - Generate survey with JSON</h1>
+
+<p>Simple-survey is a easy to use javascript plugin to automatically generate sruvey form, which provide sophisticated dom structure and some event bindings, error checkings.  </p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Pure javascript without dependency</li>
+<li>Title and Subtitle Supported</li>
+<li>Generate single select, multiple select(with optional text feedback), text input, textarea with JSON</li>
+<li>Use form post by default, output JSON result for ajax submit</li>
+<li>Basic error checking for requried input</li>
+<li>Easy customize with <strong>onSubmit</strong> <strong>onChange</strong> <strong>onError</strong> handler, use preventDefault as you wish.</li>
+</ul><h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<div class="highlight highlight-js"><pre>  <span class="nx">simpleSurvey</span><span class="p">(</span><span class="s2">".survey"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">mainTitle</span><span class="o">:</span> <span class="s2">"This is a demo"</span><span class="p">,</span><span class="c1">//main title, optional</span>
+    <span class="nx">subTitle</span><span class="o">:</span> <span class="s2">"Simple-survey is a easy to use javascript plugin to automatically generate sruvey form, which provide sophisticated dom structure and some event bindings, error checkings."</span><span class="p">,</span><span class="c1">//subTitle, optional</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s2">"/"</span><span class="p">,</span><span class="c1">//string, default: window.location.href</span>
+    <span class="nx">onSubmit</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span><span class="c1">//handler onsubmit</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span><span class="c1">//cancle form submit manually</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span><span class="c1">//log out json result</span>
+    <span class="p">},</span>
+    <span class="nx">submitText</span><span class="o">:</span> <span class="s2">"OK Submit"</span><span class="p">,</span> <span class="c1">//default: Submit, use for localization, text for submit button</span>
+    <span class="nx">warningText</span><span class="o">:</span> <span class="s2">"You must write this"</span><span class="p">,</span> <span class="c1">//default: Required</span>
+    <span class="nx">onError</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span><span class="c1">//global error handler, called when error, e is a item obj {id, itemDom, getValue()}</span>
+      <span class="nb">window</span><span class="p">.</span><span class="nx">scrollTo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">itemDom</span><span class="p">.</span><span class="nx">offsetTop</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">list</span><span class="o">:</span><span class="p">[{</span> <span class="c1">//contain all item of survey</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="s2">"1"</span><span class="p">,</span><span class="c1">//id is for the NAME of a input</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s2">"1. question one?"</span><span class="p">,</span> <span class="c1">//title of a question</span>
+      <span class="nx">selects</span><span class="o">:</span> <span class="p">{</span> <span class="c1">//object, key for value of input, value for text of option</span>
+      <span class="s2">"a"</span><span class="o">:</span> <span class="s2">"YES"</span><span class="p">,</span> 
+      <span class="s2">"b"</span><span class="o">:</span> <span class="s2">"NO"</span><span class="p">,</span>
+      <span class="s2">"na"</span><span class="o">:</span> <span class="s2">"Whatever"</span>
+      <span class="p">},</span>
+      <span class="nx">onError</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span><span class="c1">//error handler for single item</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
+      <span class="p">}</span>
+  <span class="p">},{</span>
+      <span class="nx">id</span><span class="o">:</span> <span class="s2">"2"</span><span class="p">,</span>
+      <span class="nx">text</span><span class="o">:</span> <span class="s2">"2.Second question（multiple）"</span><span class="p">,</span>
+      <span class="nx">selects</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">"a"</span><span class="o">:</span> <span class="s2">"Good"</span><span class="p">,</span>
+      <span class="s2">"b"</span><span class="o">:</span> <span class="s2">"Bad"</span><span class="p">,</span>
+      <span class="s2">"other"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">text</span><span class="o">:</span> <span class="s2">"Something Else:"</span><span class="p">,</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s2">"text"</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">multi</span><span class="o">:</span> <span class="kc">true</span><span class="c1">//set this for multiple choice</span>
+  <span class="p">},{</span>
+    <span class="nx">id</span><span class="o">:</span><span class="s2">"email"</span><span class="p">,</span>
+    <span class="nx">text</span><span class="o">:</span> <span class="s2">"Email"</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">"text"</span><span class="p">,</span>
+    <span class="nx">onChange</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}]</span>
+<span class="p">})</span>
+</pre></div>
+
+<h2>
+<a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback</h2>
+
+<p>Developer: zhangcx93(<a href="mailto:zhangcx93@gmail.com">zhangcx93@gmail.com</a>)</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Simple-survey maintained by <a href="https://github.com/zhangcx93">zhangcx93</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
