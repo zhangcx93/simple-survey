@@ -11,7 +11,7 @@ Simple-survey is a easy to use javascript plugin to automatically generate sruve
 ## Example
 ```js
   simpleSurvey(".survey", {
-    mainTitle: "This is a survey demo",//main title, optional
+    mainTitle: "This is a demo",//main title, optional
     subTitle: "Simple-survey is a easy to use javascript plugin to automatically generate sruvey form, which provide sophisticated dom structure and some event bindings, error checkings.",//subTitle, optional
     url: "/",//string, default: window.location.href
     onSubmit: function (e, result) {//handler onsubmit
@@ -20,15 +20,19 @@ Simple-survey is a easy to use javascript plugin to automatically generate sruve
     },
     submitText: "OK Submit", //default: Submit, use for localization, text for submit button
     warningText: "You must write this", //default: Required
+    onError: function (e) {//global error handler, called when error, e is a item obj {id, itemDom, getValue()}
+      window.scrollTo(0, e.itemDom.offsetTop);
+      console.log(e);
+    },
     list:[{ //contain all item of survey
       id: "1",//id is for the NAME of a input
       text: "1. question one?", //title of a question
       selects: { //object, key for value of input, value for text of option
-      "a": "A YES", 
-      "b": "B NO",
-      "na": "C Whatever"
+      "a": "YES", 
+      "b": "NO",
+      "na": "Whatever"
       },
-      onError: function (e) {
+      onError: function (e) {//error handler for single item
         e.preventDefault();
         console.log(e.target);
       }
@@ -36,8 +40,8 @@ Simple-survey is a easy to use javascript plugin to automatically generate sruve
       id: "2",
       text: "2.Second question（multiple）",
       selects: {
-      "a": "A Good",
-      "b": "B Bad",
+      "a": "Good",
+      "b": "Bad",
       "other": {
         text: "Something Else:",
         type: "text"
