@@ -1,3 +1,4 @@
+//TODO: add error handling type
 var simpleSurvey = function (selector, option) {
   var defaultOption = {
     method: "POST",
@@ -213,6 +214,7 @@ simpleSurvey.fn = function (selector, option) {
 
   var submitButton = input.cloneNode();
   submitButton.setAttribute("type", "submit");
+  submitButton.className = "survey-submit";
   submitButton.setAttribute("value", option.submitText);
 
   if (option.onSubmit) {
@@ -222,6 +224,7 @@ simpleSurvey.fn = function (selector, option) {
         if ((itemList[i].getValue() == "" || itemList[i].getValue() == []) && !itemList[i].list.optional) {
           //not optional and not inputed
           evt.preventDefault();
+          option.onError(itemList[i], option.warningText);
           itemList[i].onError(option.warningText);
           return;
         }
