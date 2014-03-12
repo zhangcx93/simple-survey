@@ -8,6 +8,10 @@ Simple-survey is a easy to use javascript plugin to automatically generate sruve
 - Basic error checking for requried input
 - Easy customize with **onSubmit** **onChange** **onError** handler, use preventDefault as you wish.
 
+## JSFiddle
+  [Fiddle Page](http://jsfiddle.net/sXjb4/)  
+  [Full Screen Demo](http://jsfiddle.net/sXjb4/embedded/result/)
+
 ## Example
 ```js
   simpleSurvey(".survey", {
