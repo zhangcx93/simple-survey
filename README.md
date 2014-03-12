@@ -3,7 +3,7 @@ Simple-survey is a easy to use javascript plugin to automatically generate sruve
 ## Features
 - Pure javascript without dependency
 - Title and Subtitle Supported
-- Generate single select, multiple select(with optional text feedback), text input with JSON
+- Generate single select, multiple select(with optional text feedback), text input, textarea with JSON
 - Use form post by default, output JSON result for ajax submit
 - Basic error checking for requried input
 - Easy customize with **onSubmit** **onChange** **onError** handler, use preventDefault as you wish.

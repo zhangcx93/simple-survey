@@ -46,7 +46,7 @@ simpleSurvey.fn = function (selector, option) {
 
   that.option = option;
 
-  if(!wrap) {
+  if (!wrap) {
     throw new Error("Cant find matched elements")
     return;
   }
@@ -65,8 +65,8 @@ simpleSurvey.fn = function (selector, option) {
 
       dom.querySelector(".survey-warning").innerHTML = "";
 
-      if (e.type == "text") {
-        value = dom.querySelector("input[type=text]").value;
+      if (e.type == "text" || e.type == "textarea") {
+        value = dom.querySelector(".survey-input").value;
       }
       else {
         var checked = dom.querySelectorAll(":checked");
@@ -131,7 +131,7 @@ simpleSurvey.fn = function (selector, option) {
   mainDiv.setAttribute("method", option.method);
   mainDiv.setAttribute("action", option.url);
 
-  if(option.mainTitle) {
+  if (option.mainTitle) {
     var title = div.cloneNode();
     title.className = "survey-title";
     title.innerHTML = option.mainTitle || '';
@@ -157,21 +157,27 @@ simpleSurvey.fn = function (selector, option) {
     itemDom.appendChild(itemTitle);
     itemDom.appendChild(itemStatus);
 
-    if(!item.id) {
+    if (!item.id) {
       throw new Error("id missed");
     }
 
-    if (item.type == "text") {
+    if (item.type == "text" || item.type == "textarea") {
       var itemInputWrap = div.cloneNode(),
+        itemInput;
+      if (item.type == "text") {
         itemInput = input.cloneNode();
+        itemInput.type = item.type;
+      }
+      else {
+        itemInput = document.createElement("textarea");
+      }
       itemInputWrap.className = "survey-input-wrap";
       itemInput.className = "survey-input";
       itemInput.name = item.id;
-      itemInput.type = "text";
       itemInputWrap.appendChild(itemInput);
       itemDom.appendChild(itemInputWrap);
     }
-    else if(item.selects) {
+    else if (item.selects) {
       for (var select in item.selects) {
         var itemInputWrap = div.cloneNode(),
           itemInput = input.cloneNode();
