@@ -95,16 +95,12 @@ simpleSurvey.fn = function (selector, option) {
       }
     };
 
-    var onError = function (msg) {
-      var prevent = false;
+    var prevent = false;
+    var onError = function (item, msg) {
       if (e.onError) {
-        e.onError({
-          target: dom,
-          preventDefault: function () {
-            prevent = true;
-          }
-        })
+        e.onError(item)
         if (prevent) {
+          prevent = false;
           return;
         }
       }
@@ -117,12 +113,17 @@ simpleSurvey.fn = function (selector, option) {
       return value;
     }
 
+    var preventDefault = function () {
+      prevent = true;
+    }
+
     return {
       id: e.id,
       list: e,
       itemDom: dom,
       getValue: getValue,
       onChangeHandle: onChangeHandle,
+      preventDefault: preventDefault,
       onError: onError
     }
     //end of item
@@ -224,8 +225,8 @@ simpleSurvey.fn = function (selector, option) {
         if ((itemList[i].getValue() == "" || itemList[i].getValue() == []) && !itemList[i].list.optional) {
           //not optional and not inputed
           evt.preventDefault();
+          itemList[i].onError(itemList[i], option.warningText);
           option.onError(itemList[i], option.warningText);
-          itemList[i].onError(option.warningText);
           return;
         }
       }
