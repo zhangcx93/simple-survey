@@ -215,6 +215,13 @@ simpleSurvey.fn = function (selector, option) {
       return;
     }
 
+    if(item.after) {
+      var itemInputAfter = div.cloneNode();
+      itemInputAfter.className = "survey-input-after";
+      itemInputAfter.innerHTML = item.after;
+      itemDom.appendChild(itemInputAfter);
+    }
+
     itemList[i] = initItem(itemDom, item);
     mainDiv.appendChild(itemDom);
   }

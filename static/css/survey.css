@@ -32,6 +32,10 @@
   font-size: 0.8em;
   line-height: 2em;
 }
+.survey-input-after{
+  font-size: 0.6em;
+  line-height: 2em;
+}
 .survey-submit {
   display: block;
   margin-top: 20px;
