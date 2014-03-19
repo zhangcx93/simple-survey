@@ -56,6 +56,12 @@ simpleSurvey.fn = function (selector, option) {
     //closure to save value and bind event for each list;
     var value = e.multi ? [] : "";
 
+    dom.addEventListener('click', function (e) {
+      if(e.target.className == "survey-input-wrap") {
+        e.target.querySelector(".survey-input").click();
+      }
+    }, true)
+
     var onChangeHandle = [],
       Check = [];
     var onChangeHandle = function (evt) {
