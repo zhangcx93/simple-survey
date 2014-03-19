@@ -57,7 +57,7 @@ simpleSurvey.fn = function (selector, option) {
     var value = e.multi ? [] : "";
 
     dom.addEventListener('click', function (e) {
-      if(e.target.className == "survey-input-wrap") {
+      if (e.target.className == "survey-input-wrap") {
         e.target.querySelector(".survey-input").click();
       }
     }, true)
@@ -182,6 +182,11 @@ simpleSurvey.fn = function (selector, option) {
       itemInputWrap.className = "survey-input-wrap";
       itemInput.className = "survey-input";
       itemInput.name = item.id;
+      if (item.
+        default) {
+        itemInput.value = item.
+        default;
+      }
       itemInputWrap.appendChild(itemInput);
       itemDom.appendChild(itemInputWrap);
     }
@@ -209,13 +214,23 @@ simpleSurvey.fn = function (selector, option) {
         }
         itemDom.appendChild(itemInputWrap);
       }
+      if (item.default) {
+        if (typeof item.default == 'string') {
+          itemDom.querySelector("[value=" + item.default +"]").click();
+        }
+        else if (item.default.length) {
+          for (var i = 0; i < item.default.length; i++) {
+            itemDom.querySelector("[value=" + item.default[i] +"]").click();
+          }
+        }
+      }
     }
     else {
       throw new Error("The item " + item.id + "missed selects or type");
       return;
     }
 
-    if(item.after) {
+    if (item.after) {
       var itemInputAfter = div.cloneNode();
       itemInputAfter.className = "survey-input-after";
       itemInputAfter.innerHTML = item.after;

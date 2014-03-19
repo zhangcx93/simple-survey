@@ -34,6 +34,7 @@
       "b": "NO",
       "na": "Whatever"
       },
+      default: "a",
       onError: function (e) {//error handler for single item
         e.preventDefault();
         console.log(e.target);
@@ -55,6 +56,7 @@
     id:"email",
     text: "Email",
     type: "text",
+    default: "example@example.com",
     onChange: function (e, value) {
       console.log(value);
     }
