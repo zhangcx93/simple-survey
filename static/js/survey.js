@@ -15,12 +15,13 @@ var simpleSurvey = function (selector, option) {
     for (; i < length; i++) {
       if ((obj = arguments[i]) != null) {
         for (name in obj) {
-          copy = obj[name];
-          if (target === copy) {
-            continue;
-          }
-          else if (copy !== undefined) {
-            target[name] = copy;
+          if (obj.hasOwnProperty(name)) {
+            copy = obj[name];
+            if (target === copy) {
+            }
+            else if (copy !== undefined) {
+              target[name] = copy;
+            }
           }
         }
       }
@@ -29,7 +30,7 @@ var simpleSurvey = function (selector, option) {
   };
 
   return new simpleSurvey.fn(selector, extend(defaultOption, option))
-}
+};
 
 simpleSurvey.fn = function (selector, option) {
   //init variables
@@ -42,28 +43,31 @@ simpleSurvey.fn = function (selector, option) {
     mainDiv = form.cloneNode(),
     list = option.list,
     length = option.list.length,
-    i = 0,
     itemList = [];
 
   that.option = option;
 
   if (!wrap) {
     throw new Error("Cant find matched elements")
-    return;
   }
 
   var initItem = function (dom, e) {
     //closure to save value and bind event for each list;
-    var value = e.multi ? [] : "";
+    var value;
+
+    if (e.default) {
+      value = e.multi ? [e.default] : e.default;
+    }
+    else {
+      value = e.multi ? [] : "";
+    }
 
     dom.addEventListener('click', function (e) {
       if (e.target.className == "survey-input-wrap") {
         e.target.querySelector(".survey-input").click();
       }
-    }, true)
+    }, true);
 
-    var onChangeHandle = [],
-      Check = [];
     var onChangeHandle = function (evt) {
       //get the value when things changed;
       if (evt.target.className.indexOf("survey-input") == -1) {
@@ -104,24 +108,24 @@ simpleSurvey.fn = function (selector, option) {
     var prevent = false;
     var onError = function (item, msg) {
       if (e.onError) {
-        e.onError(item)
+        e.onError(item);
         if (prevent) {
           prevent = false;
           return;
         }
       }
       dom.querySelector(".survey-warning").innerHTML = msg;
-    }
+    };
 
-    dom.addEventListener("change", onChangeHandle, false)
+    dom.addEventListener("change", onChangeHandle, false);
 
     var getValue = function () {
       return value;
-    }
+    };
 
     var preventDefault = function () {
       prevent = true;
-    }
+    };
 
     return {
       id: e.id,
@@ -131,9 +135,9 @@ simpleSurvey.fn = function (selector, option) {
       onChangeHandle: onChangeHandle,
       preventDefault: preventDefault,
       onError: onError
-    }
+    };
     //end of item
-  }
+  };
 
   mainDiv.className = "survey-wrap";
   mainDiv.setAttribute("method", option.method);
@@ -153,10 +157,10 @@ simpleSurvey.fn = function (selector, option) {
     mainDiv.appendChild(subTitle);
   }
 
-  for (; i < length; i++) {
-    var itemDom = div.cloneNode(),
-      itemTitle = div.cloneNode(),
-      itemStatus = div.cloneNode(),
+  for (var i = 0; i < length; i++) {
+    var itemDom = div.cloneNode(false),
+      itemTitle = div.cloneNode(false),
+      itemStatus = div.cloneNode(false),
       item = list[i];
     itemDom.className = "survey-item";
     itemTitle.innerHTML = list[i].text;
@@ -169,9 +173,10 @@ simpleSurvey.fn = function (selector, option) {
       throw new Error("id missed");
     }
 
+    var itemInputWrap, itemInput;
+
     if (item.type == "text" || item.type == "textarea") {
-      var itemInputWrap = div.cloneNode(),
-        itemInput;
+      itemInputWrap = div.cloneNode();
       if (item.type == "text") {
         itemInput = input.cloneNode();
         itemInput.type = item.type;
@@ -182,52 +187,52 @@ simpleSurvey.fn = function (selector, option) {
       itemInputWrap.className = "survey-input-wrap";
       itemInput.className = "survey-input";
       itemInput.name = item.id;
-      if (item.
-        default) {
-        itemInput.value = item.
-        default;
+      if (item.default) {
+        itemInput.value = item.default;
       }
       itemInputWrap.appendChild(itemInput);
       itemDom.appendChild(itemInputWrap);
     }
     else if (item.selects) {
       for (var select in item.selects) {
-        var itemInputWrap = div.cloneNode(),
+        if (item.selects.hasOwnProperty(select)) {
+          itemInputWrap = div.cloneNode();
           itemInput = input.cloneNode();
-        itemInputWrap.className = "survey-input-wrap";
-        itemInput.className = "survey-input";
-        itemInput.name = item.id;
-        itemInput.type = item.multi ? "checkbox" : "radio";
-        itemInput.value = select;
-        itemInputWrap.appendChild(itemInput);
-        if (item.selects[select].text) {
-          var tempInput = input.cloneNode();
-          tempInput.type = item.selects[select].type || "text";
-          tempInput.className = "survey-input";
-          itemInputWrap.insertBefore(tempInput, itemInput.nextSibling);
-          itemInputWrap.insertBefore(document.createTextNode(item.selects[select].text),
-            itemInput.nextSibling);
+          itemInputWrap.className = "survey-input-wrap";
+          itemInput.className = "survey-input";
+          itemInput.name = item.id;
+          itemInput.type = item.multi ? "checkbox" : "radio";
+          itemInput.value = select;
+          itemInputWrap.appendChild(itemInput);
+          if (item.selects[select].text) {
+            var tempInput = input.cloneNode();
+            tempInput.type = item.selects[select].type || "text";
+            tempInput.className = "survey-input";
+            itemInputWrap.insertBefore(tempInput, itemInput.nextSibling);
+            itemInputWrap.insertBefore(document.createTextNode(item.selects[select].text),
+              itemInput.nextSibling);
+          }
+          else {
+            itemInputWrap.insertBefore(document.createTextNode(item.selects[select]),
+              itemInput.nextSibling);
+          }
+          itemDom.appendChild(itemInputWrap);
         }
-        else {
-          itemInputWrap.insertBefore(document.createTextNode(item.selects[select]),
-            itemInput.nextSibling);
-        }
-        itemDom.appendChild(itemInputWrap);
+
       }
       if (item.default) {
         if (typeof item.default == 'string') {
-          itemDom.querySelector("[value=" + item.default +"]").click();
+          itemDom.querySelector("[value=" + item.default + "]").click();
         }
         else if (item.default.length) {
-          for (var i = 0; i < item.default.length; i++) {
-            itemDom.querySelector("[value=" + item.default[i] +"]").click();
+          for (i = 0; i < item.default.length; i++) {
+            itemDom.querySelector("[value=" + item.default[i] + "]").click();
           }
         }
       }
     }
     else {
       throw new Error("The item " + item.id + "missed selects or type");
-      return;
     }
 
     if (item.after) {
@@ -265,4 +270,4 @@ simpleSurvey.fn = function (selector, option) {
   mainDiv.appendChild(submitButton);
 
   wrap.appendChild(mainDiv);
-}
+};
